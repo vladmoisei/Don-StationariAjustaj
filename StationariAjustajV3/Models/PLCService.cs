@@ -100,20 +100,21 @@ namespace StationariAjustajV3.Models
                 try
                 {
                     ConnectionState = ConnectionStates.Connecting;
+                    var _cancelTasks = new CancellationTokenSource();
                     var performTaskCheckAvailability = Task.Run(() =>
                     {
                         if (_client.IsAvailable)
                             _client.Open();
-                    });
-                    performTaskCheckAvailability.Wait(TimeSpan.FromSeconds(0.5)); // Asteapta Task sa fie complet in 1 sec 
+                    }, _cancelTasks.Token);
+                    if (!performTaskCheckAvailability.Wait(TimeSpan.FromSeconds(0.5))) _cancelTasks.Cancel(); // Asteapta Task sa fie complet in 1 sec 
                     
 
                     bool result = false;
                     var performTaskCitireVariabile = Task.Run(() =>
                     {
                         result = _client.IsConnected;
-                    });
-                    performTaskCitireVariabile.Wait(TimeSpan.FromSeconds(1)); // Asteapta Task sa fie complet in 1 sec 
+                    }, _cancelTasks.Token);
+                    if (!performTaskCitireVariabile.Wait(TimeSpan.FromSeconds(1))) _cancelTasks.Cancel(); // Asteapta Task sa fie complet in 1 sec 
 
                     if (result)
                     {
@@ -122,11 +123,32 @@ namespace StationariAjustajV3.Models
                     }
                     else
                     {
-                        Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Connection error: nu a reusit conectarea");
+                        //Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Connection error: nu a reusit conectarea");
                         ConnectionState = ConnectionStates.Offline;
                     }
 
                     //MessageBox.Show("S-a conectat PLC " +_nume);
+                }
+                catch (AggregateException e)
+                {
+                    ConnectionState = ConnectionStates.Offline;
+                    //Console.WriteLine("AggregateException");
+                    foreach (var v in e.InnerExceptions)
+                        Console.WriteLine(e.Message + " " + v.Message);
+                    LogMessegeRaportareAjustaj.WriteMessegeToLogFile("Eroare citire variabile plc, cancel Task" + e.Message);
+                    LogMessegeRaportareAjustaj.WriteMessegeToLogFile("eroare conectare Plc: " +
+                        _nume + " dupa catch eroare PlcException");
+                }
+                catch (OperationCanceledException Ex)
+                {
+                    ConnectionState = ConnectionStates.Offline;
+                    //Console.WriteLine(Ex.ToString());
+                    //Console.WriteLine("OperationCanceledException in Task {0}: The operation was cancelled.",
+                    //                    t2.Id);
+                    LogMessegeRaportareAjustaj.WriteMessegeToLogFile("Eroare citire variabile plc, cancel Task" + Ex.Message);
+                    LogMessegeRaportareAjustaj.WriteMessegeToLogFile("eroare conectare Plc: " +
+                        _nume + " dupa catch eroare PlcException");
+
                 }
                 catch (PlcException err)
                 {
@@ -167,10 +189,13 @@ namespace StationariAjustajV3.Models
             {
                 lock (_locker)
                 {
-                    var performTaskCitireVariabile = Task.Run(() =>
+                    try
                     {
-                        NumePlc = _nume;
-                        Oprire1 = Convert.ToBoolean(_client.Read(_oprire1)); // BreakDown in Progress [1 = BreakDown]
+                        var _cancelTasks = new CancellationTokenSource();
+                        var performTaskCitireVariabile = Task.Run(() =>
+                        {
+                            NumePlc = _nume;
+                            Oprire1 = Convert.ToBoolean(_client.Read(_oprire1)); // BreakDown in Progress [1 = BreakDown]
                         Oprire2 = Convert.ToBoolean(_client.Read(_oprire2));// Second Break Down In Progress [1 = Second Break Down]
                         DefMecanic = Convert.ToBoolean(_client.Read(_defMecanic)); // Mechanical Cause
                         DefElectric = Convert.ToBoolean(_client.Read(_defElectric)); // Electrical Cause
@@ -179,23 +204,60 @@ namespace StationariAjustajV3.Models
                         LipsaPodMaterial = Convert.ToBoolean(_client.Read(_lipsaPodMaterial)); // No Creane/ No Material Cause  
 
                         if (Oprire1)
-                        {
-                            if (DefMecanic)
-                                MotivStationare = "Defect mecanic";
-                            else if (DefElectric)
-                                MotivStationare = "Defect electric";
-                            else if (OprireProgramata)
-                                MotivStationare = "Oprire programata";
-                            else if (OprireTehnologica)
-                                MotivStationare = "Oprire tehnologica";
-                            else if (LipsaPodMaterial)
-                                MotivStationare = "Lipsa pod rulant / Lipsa material";
-                            else MotivStationare = "Nu s-a apasat cauza";
-                        }
-                        else MotivStationare = "Functioneaza";
+                            {
+                                if (DefMecanic)
+                                    MotivStationare = "Defect mecanic";
+                                else if (DefElectric)
+                                    MotivStationare = "Defect electric";
+                                else if (OprireProgramata)
+                                    MotivStationare = "Oprire programata";
+                                else if (OprireTehnologica)
+                                    MotivStationare = "Oprire tehnologica";
+                                else if (LipsaPodMaterial)
+                                    MotivStationare = "Lipsa pod rulant / Lipsa material";
+                                else MotivStationare = "Nu s-a apasat cauza";
+                            }
+                            else MotivStationare = "Functioneaza";
 
-                    });
-                    performTaskCitireVariabile.Wait(TimeSpan.FromSeconds(2)); // Asteapta Task sa fie complet in 2 sec  
+                        }, _cancelTasks.Token);
+                        if (!performTaskCitireVariabile.Wait(TimeSpan.FromSeconds(2))) _cancelTasks.Cancel(); // Asteapta Task sa fie complet in 2 sec  
+                    }
+                    catch (AggregateException e)
+                    {
+                        ConnectionState = ConnectionStates.Offline;
+                        //Console.WriteLine("AggregateException");
+                        foreach (var v in e.InnerExceptions)
+                            Console.WriteLine(e.Message + " " + v.Message);
+                        LogMessegeRaportareAjustaj.WriteMessegeToLogFile("Eroare citire variabile plc, cancel Task" + e.Message);
+                        LogMessegeRaportareAjustaj.WriteMessegeToLogFile("eroare refresh Plc: " +
+                            _nume + " dupa catch eroare PlcException");
+                    }
+                    catch (OperationCanceledException Ex)
+                    {
+                        ConnectionState = ConnectionStates.Offline;
+                        //Console.WriteLine(Ex.ToString());
+                        //Console.WriteLine("OperationCanceledException in Task {0}: The operation was cancelled.",
+                        //                    t2.Id);
+                        LogMessegeRaportareAjustaj.WriteMessegeToLogFile("Eroare citire variabile plc, cancel Task" + Ex.Message);
+                        LogMessegeRaportareAjustaj.WriteMessegeToLogFile("eroare refresh Plc: " +
+                            _nume + " dupa catch eroare PlcException");
+
+                    }
+                    catch (PlcException err)
+                    {
+                        ConnectionState = ConnectionStates.Offline;
+                        LogMessegeRaportareAjustaj.WriteMessegeToLogFile(err.ErrorCode.ToString());
+                        LogMessegeRaportareAjustaj.WriteMessegeToLogFile("eroare PlcException " +
+                            "la refresh Plc" + _nume);
+                    }
+                    catch (Exception ex)
+                    {
+                        ConnectionState = ConnectionStates.Offline;
+                        LogMessegeRaportareAjustaj.WriteMessegeToLogFile(ex.Message.ToString());
+                        LogMessegeRaportareAjustaj.WriteMessegeToLogFile("eroare refresh Plc: " +
+                            _nume + " dupa catch eroare PlcException");
+                        //throw;
+                    }
                 }
             }
             ScanTime = DateTime.Now - startScanTime;
