@@ -1,0 +1,594 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StationariAjustajV3"
+        xmlns:DVC="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        xmlns:vm="clr-namespace:StationariAjustajV3.ViewModels"
+        xmlns:Converters="clr-namespace:StationariAjustajV3.Converters" x:Class="StationariAjustajV3.MainWindow"
+        mc:Ignorable="d"
+        Title="Stationari Utilaje Ajustaj" Height="450" Width="800"
+        Closing="DataWindow_Closing"
+        >
+    <Window.Resources>
+        <Converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter"/>
+    </Window.Resources>
+    <!--<Window.DataContext>
+        <vm:MainWindowViewModel />
+    </Window.DataContext>-->
+ 
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border Width="Auto" Height="Auto"
+                    Grid.Row="0" 
+                    Grid.Column="0" Grid.ColumnSpan="3"
+                    Background="#FFE7E5E2"
+                    BorderThickness="4"
+                    BorderBrush="Black"
+                    Margin="4"             
+                    CornerRadius="10">
+                <Grid x:Name="rullatriceVecheGridBackground">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="0.5*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Width="Auto"
+                           Margin="0,5,0,5"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Top"
+                           Text="Rullatrice ProjectMan"
+                           TextWrapping="Wrap"
+                           Grid.Row="0"
+                           Grid.ColumnSpan="2" FontSize="36" FontWeight="Bold"/>
+                    <Border x:Name="rullatriceVecheTextBackground"   Grid.Row="1" Grid.ColumnSpan="2" Background="LawnGreen" CornerRadius="15">
+                        <TextBlock x:Name="rullatriceVecheText" 
+                               Margin="10,5,0,0"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Top"
+                               Text="Functioneaza"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="28"/>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2">
+                        <!--<Ellipse Width="19"
+                             Height="18"
+                             Margin="29,10,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"                
+                             Stroke="Black" Fill="Gray" />-->
+
+                        <TextBlock x:Name="rullatriceVecheRandamanetActual" 
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="R. actual: -"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="26"/>
+                        <TextBlock x:Name="rullatriceVecheRandamentRealizat" 
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="R. Realizat: -"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="26"/>
+                        <TextBlock x:Name="rullatriceVecheTinta"
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Tinta: 98%"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="26"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Grid.Column="0">
+                        <TextBlock 
+                               Height="17"
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Grafic stationari"
+                               TextWrapping="Wrap" />
+                    </StackPanel>
+                    <DVC:Chart x:Name="rullatriceVecheChart" Grid.Row="3" Grid.ColumnSpan="2" MinWidth="400" 
+                           Background="#FFC8CAC4" Margin="5 5">
+                        <DVC:ColumnSeries Title="Stationari %"
+                                       IndependentValueBinding="{Binding Key}"
+                                       DependentValueBinding="{Binding Value}"/>
+                    </DVC:Chart>
+                    <StatusBar Grid.Row="4" Grid.ColumnSpan="2" Padding="0">
+                        <TextBlock                                
+                               Margin="10,5,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Stare Conexiune: "
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <TextBlock x:Name="rullatriceVecheStareConexiune"                                
+                               Margin="5,5,10,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="-"
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <Separator/>
+                        <TextBlock  
+                               Height="17"
+                               Margin="10,5,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Scan Time: "
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <TextBlock x:Name="rullatriceVecheScanTime"  
+                               Height="17"
+                               Margin="5,5,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="00:00:00"
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <TextBox x:Name="oraRaportTextBox" MinWidth="100"/>
+                        <TextBox x:Name="delayRaportTextBox" MinWidth="20"/>
+                        <Button x:Name="Seteaza_Data" Content="Setare"/>
+                        <Button x:Name="Afiseaza_Data" Content="Afisare"/>
+                        <TextBlock x:Name="DataDeAfisat"></TextBlock>
+                    </StatusBar>
+                </Grid>
+            </Border>
+            <Border Width="Auto" Height="Auto"
+                    Grid.Row="0" 
+                    Grid.Column="3" Grid.ColumnSpan="3"
+                    Background="#FFE7E5E2"
+                    BorderThickness="4"
+                    BorderBrush="Black"
+                    Margin="4"             
+                    CornerRadius="10">
+                <Grid x:Name="rullatriceLandgrafGridBackground">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="0.5*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Width="Auto"
+                           Margin="0,5,0,5"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Top"
+                           Text="Rullatrice Landgraf"
+                           TextWrapping="Wrap"
+                           Grid.Row="0"
+                           Grid.ColumnSpan="2" FontSize="36" FontWeight="Bold"/>
+                    <Border x:Name="rullatriceLandgrafTextBackgound"   Grid.Row="1" Grid.ColumnSpan="2"  CornerRadius="15" Background="LawnGreen">
+                        <!--Background="LawnGreen"-->
+                        <TextBlock x:Name="rullatriceLandgrafText" 
+                               Margin="10,5,0,0"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Top"
+                               Text="Defect Mecanic"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="28"/>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2">
+                        <!--<Ellipse Width="19"
+                             Height="18"
+                             Margin="29,10,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"                
+                             Stroke="Black" Fill="Gray" />-->
+
+                        <TextBlock x:Name="rullatriceLandgrafRandamentActual" 
+
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="R. actual: -"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="26" />
+                        <TextBlock x:Name="rullatriceLandgrafRandamentRealizat" 
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="R. Realizat: -"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="26"/>
+                        <TextBlock x:Name="rullatriceLandgrafTinta"
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Tinta: 98%"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="26"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Grid.Column="0">
+                        <TextBlock 
+                               Height="17"
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Grafic stationari"
+                               TextWrapping="Wrap" />
+                    </StackPanel>
+                    <DVC:Chart x:Name="rullatriceLandgrafChart" Grid.Row="3" Grid.ColumnSpan="2" MinWidth="400" 
+                           Background="#FFC8CAC4" Margin="5 5">
+                        <DVC:ColumnSeries Title="Stationari %"
+                                       IndependentValueBinding="{Binding Key}"
+                                       DependentValueBinding="{Binding Value}"/>
+                    </DVC:Chart>
+                    <StatusBar Grid.Row="4" Grid.ColumnSpan="2" Padding="0">
+                        <TextBlock                                 
+                               Margin="10,5,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Stare Conexiune: "
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <TextBlock x:Name="rullatriceLandgrafStareConexiune"                               
+                               Margin="5,5,10,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="-"
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <Separator/>
+                        <TextBlock  
+                               Height="17"
+                               Margin="10,5,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Scan Time: "
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <TextBlock x:Name="rullatriceLandgrafScanTime"  
+                               Height="17"
+                               Margin="5,5,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="00:00:00"
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <Button x:Name="Start_Comm" Content="Start comm" />
+                        <Button x:Name="Stop_Comm" Content="Stop comm" />
+                        <TextBox x:Name="adreseMailTextBox" MinWidth="100"/>
+                    </StatusBar>
+                </Grid>
+            </Border>
+            <Border Width="Auto" Height="Auto"
+                    Grid.Row="1" 
+                    Grid.Column="0" Grid.ColumnSpan="2"
+                    Background="#FFE7E5E2"
+                    BorderThickness="4"
+                    BorderBrush="Black"
+                    Margin="4"             
+                    CornerRadius="10">
+                <Grid x:Name="elindGridBackgound" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="0.5*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Width="Auto"
+                           Margin="0,5,0,5"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Top"
+                           Text="Elind"
+                           TextWrapping="Wrap"
+                           Grid.Row="0"
+                           Grid.ColumnSpan="2" FontSize="36" FontWeight="Bold"/>
+                    <Border x:Name="elindTextBackground"   Grid.Row="1" Grid.ColumnSpan="2" Background="LawnGreen" CornerRadius="15">
+                        <TextBlock x:Name="elindText" 
+                               Margin="10,5,0,0"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Top"
+                               Text="Functioneaza / Motiv stationare"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="24"/>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2">
+                        <!--<Ellipse Width="19"
+                             Height="18"
+                             Margin="29,10,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"                
+                             Stroke="Black" Fill="Gray" />-->
+
+                        <TextBlock x:Name="elindRandamentActual" 
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="R. actual: -"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="24"/>
+
+                        <TextBlock x:Name="elindRandamentRealizat" 
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="R. Realizat: -"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="24"/>
+                        <TextBlock x:Name="elindTinta"
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Tinta: 98%"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="24"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Grid.Column="0">
+                        <TextBlock 
+                               Height="17"
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Grafic stationari"
+                               TextWrapping="Wrap" />
+                    </StackPanel>
+                    <DVC:Chart x:Name="elindChart" Grid.Row="3" Grid.ColumnSpan="2" MinWidth="400" 
+                           Background="#FFC8CAC4" Margin="5 5">
+                        <DVC:ColumnSeries Title="Stationari %"
+                                       IndependentValueBinding="{Binding Key}"
+                                       DependentValueBinding="{Binding Value}"/>
+                    </DVC:Chart>
+                    <StatusBar Grid.Row="4" Grid.ColumnSpan="2" Padding="0">
+                        <TextBlock                                
+                               Margin="10,5,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Stare Conexiune: "
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <TextBlock x:Name="elindStareConexiune"                                
+                               Margin="5,5,10,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="-"
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <Separator/>
+                        <TextBlock  
+
+                               Margin="10,5,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Scan Time: "
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <TextBlock x:Name="elindScanTime"  
+
+                               Margin="5,5,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="00:00:00"
+                               TextWrapping="Wrap" FontSize="16"/>
+
+                    </StatusBar>
+                </Grid>
+            </Border>
+            <Border Width="Auto" Height="Auto"
+                    Grid.Row="1" 
+                    Grid.Column="2" Grid.ColumnSpan="2"
+                    Background="#FFE7E5E2"
+                    BorderThickness="4"
+                    BorderBrush="Black"
+                    Margin="4"             
+                    CornerRadius="10">
+                <Grid x:Name="pellatriceLandgrafGridBackground" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="0.5*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Width="Auto"
+                           Margin="0,5,0,5"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Top"
+                           Text="Pellatrice Landgraf"
+                           TextWrapping="Wrap"
+                           Grid.Row="0"
+                           Grid.ColumnSpan="2" FontSize="36" FontWeight="Bold"/>
+                    <Border x:Name="pellatriceLandgrafTextBackground"   Grid.Row="1" Grid.ColumnSpan="2" Background="LawnGreen" CornerRadius="15">
+                        <TextBlock x:Name="pellatriceLandgrafText" 
+                               Margin="10,5,0,0"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Top"
+                               Text="Functioneaza / Motiv stationare"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="24"/>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2">
+                        <!--<Ellipse Width="19"
+                             Height="18"
+                             Margin="29,10,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"                
+                             Stroke="Black" Fill="Gray" />-->
+
+                        <TextBlock x:Name="pellatriceLandgrafRandamentActual" 
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="R. actual: -"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="24"/>
+                        <TextBlock x:Name="pellatriceLandgrafRandamentRealizat" 
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="R. Realizat: -"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="24"/>
+                        <TextBlock x:Name="pellatriceLandgrafTinta"
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Tinta: 97%"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="24"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Grid.Column="0">
+                        <TextBlock 
+                               Height="17"
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Grafic stationari"
+                               TextWrapping="Wrap" />
+                    </StackPanel>
+                    <DVC:Chart x:Name="pellatriceChart" Grid.Row="3" Grid.ColumnSpan="2" MinWidth="400" 
+                           Background="#FFC8CAC4" Margin="5 5">
+                        <DVC:ColumnSeries Title="Stationari %"
+                                       IndependentValueBinding="{Binding Key}"
+                                       DependentValueBinding="{Binding Value}"/>
+                    </DVC:Chart>
+                    <StatusBar Grid.Row="4" Grid.ColumnSpan="2" Padding="0">
+                        <TextBlock                                
+                               Margin="10,5,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Stare Conexiune: "
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <TextBlock x:Name="pellatriceLandgrafStareConexiune"                                
+                               Margin="5,5,10,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="-"
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <Separator/>
+                        <TextBlock  
+
+                               Margin="10,5,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Scan Time: "
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <TextBlock x:Name="pellatriceLandgrafScanTime"  
+
+                               Margin="5,5,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="00:00:00"
+                               TextWrapping="Wrap" FontSize="16"/>
+
+                    </StatusBar>
+                </Grid>
+            </Border>
+            <Border Width="Auto" Height="Auto"
+                    Grid.Row="1" 
+                    Grid.Column="4" Grid.ColumnSpan="2"
+                    Background="#FFE7E5E2"
+                    BorderThickness="4"
+                    BorderBrush="Black"
+                    Margin="4"             
+                    CornerRadius="10">
+                <Grid x:Name="presaValdoraGridBackground">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="0.5*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Width="Auto"
+                           Margin="0,5,0,5"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Top"
+                           Text="Presa Valdora"
+                           TextWrapping="Wrap"
+                           Grid.Row="0"
+                           Grid.ColumnSpan="2" FontSize="36" FontWeight="Bold"/>
+                    <Border x:Name="presaValdoraTextBackground"   Grid.Row="1" Grid.ColumnSpan="2" Background="LawnGreen" CornerRadius="15">
+                        <TextBlock x:Name="presaValdoraText" 
+                               Margin="10,5,0,0"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Top"
+                               Text="Functioneaza / Motiv stationare"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="24"/>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2">
+                        <!--<Ellipse Width="19"
+                             Height="18"
+                             Margin="29,10,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"                
+                             Stroke="Black" Fill="Gray" />-->
+
+                        <TextBlock x:Name="presaValdoraRandamentActual" 
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="R. actual: -"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="24"/>
+                        <TextBlock x:Name="presaValdoraRandamentRealizat" 
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="R. Realizat: -"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="24"/>
+                        <TextBlock x:Name="presaValdoraTinta" 
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Tinta: 98%"
+                               TextWrapping="Wrap" FontWeight="Bold" FontSize="24"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Grid.Column="0">
+                        <TextBlock 
+                               Height="17"
+                               Margin="10,10,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Grafic stationari"
+                               TextWrapping="Wrap" />
+                    </StackPanel>
+                    <DVC:Chart x:Name="presaValdoraChart" Grid.Row="3" Grid.ColumnSpan="2" MinWidth="400" 
+                           Background="#FFC8CAC4" Margin="5 5">
+                        <DVC:ColumnSeries Title="Stationari %"
+                                       IndependentValueBinding="{Binding Key}"
+                                       DependentValueBinding="{Binding Value}"/>
+                    </DVC:Chart>
+                    <StatusBar Grid.Row="4" Grid.ColumnSpan="2" Padding="0">
+                        <TextBlock                                
+                               Margin="10,5,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Stare Conexiune: "
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <TextBlock x:Name="presaValdoraStareConexiune"                                
+                               Margin="5,5,10,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="-"
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <Separator/>
+                        <TextBlock  
+
+                               Margin="10,5,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="Scan Time: "
+                               TextWrapping="Wrap" FontSize="16"/>
+                        <TextBlock x:Name="presaValdoraScanTime"  
+
+                               Margin="5,5,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Text="00:00:00"
+                               TextWrapping="Wrap" FontSize="16"/>
+                    </StatusBar>
+                </Grid>
+            </Border>
+        </Grid>
+   
+</Window>
