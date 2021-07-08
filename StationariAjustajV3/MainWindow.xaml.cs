@@ -44,15 +44,6 @@ namespace StationariAjustajV3
             Afiseaza_Data.Click += Afiseaza_Data_Click;
             Start_Comm.Click += Start_Comm_Click;
             Stop_Comm.Click += Stop_Comm_click;
-
-            //PLCService rullatriceLandgrafPLC = new PLCService(CpuType.S7400, "172.16.4.72", 0, 2, "Rullatrice Landgraf",
-            //    "A35.4", "A35.5", "A35.6", "A35.7", "A36.0", "A36.6", "A36.7");
-            //PLCService elindPLC = new PLCService(CpuType.S7300, "172.16.4.80", 0, 2, "Elind",
-            //    "A47.6", "A47.0", "A47.1", "A47.2", "A47.3", "A47.4", "A47.5");
-            //PLCService pelatriceLandgrafPLC = new PLCService(CpuType.S7300, "192.168.1.1", 0, 2, "Pellatrice Landgraf",
-            //    "A22.6", "A23.0", "A23.1", "A23.4", "A23.5", "A23.6", "A23.7");
-            //PLCService presaValdoraPLC = new PLCService(CpuType.S71500, "192.168.0.1", 0, 0, "Presa Valdora",
-            //    "A3.0", "A3.1", "A3.2", "A3.3", "A3.4", "A3.5", "A3.6");
         }
 
         void ProgramBackground()
@@ -61,19 +52,17 @@ namespace StationariAjustajV3
             {
                 DateTime timpStartProgram = DateTime.Now;
                 DateTime timpStartRandamentActual = DateTime.Now;
-                //PLCService rullatriceVechePlc = new PLCService(CpuType.S7300, "172.16.4.167", 0, 2, "Rullatrice Project Man",
-                //    "A2.0", "A2.1", "A2.2", "A2.3", "A2.4", "A2.5", "A2.6");
 
                 // Initializare variabile PLC-uri
                 PLCViewModel rullatriceVechePlc = new PLCViewModel(new PLCService(CpuType.S7300, "172.16.4.167", 0, 2, "Rullatrice Project Man",
                     "A2.0", "A2.1", "A2.2", "A2.3", "A2.4", "A2.5", "A2.6"));
                 PLCViewModel rullatriceLandgrafPLC = new PLCViewModel(new PLCService(CpuType.S7400, "172.16.4.72", 0, 2, "Rullatrice Landgraf",
                 "A35.4", "A35.5", "A35.6", "A35.7", "A36.0", "A36.6", "A36.7"));
-                PLCViewModel elindPLC = new PLCViewModel(new PLCService(CpuType.S7300, "172.16.4.80", 0, 2, "Elind",
+                PLCViewModel elindPLC = new PLCViewModel(new PLCService(CpuType.S7300, "172.16.4.5", 0, 2, "Elind",
                 "A47.6", "A47.0", "A47.1", "A47.2", "A47.3", "A47.4", "A47.5"));
                 PLCViewModel pelatriceLandgrafPLC = new PLCViewModel(new PLCService(CpuType.S7300, "192.168.1.1", 0, 2, "Pellatrice Landgraf",
                 "A22.6", "A23.0", "A23.1", "A23.4", "A23.5", "A23.6", "A23.7"));
-                PLCViewModel presaValdoraPLC = new PLCViewModel(new PLCService(CpuType.S71500, "192.168.0.1", 0, 0, "Presa Valdora",
+                PLCViewModel presaValdoraPLC = new PLCViewModel(new PLCService(CpuType.S71500, "172.16.4.195", 0, 2, "Presa Valdora",
                 "A3.0", "A3.1", "A3.2", "A3.3", "A3.4", "A3.5", "A3.6"));
 
                 // Creare lista defecte pentru PLC-uri
